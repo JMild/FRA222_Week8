@@ -44,10 +44,10 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-float AngleInput =0;
+float AngleInput =0;    // radian
 float SineOutput =0;
-float ChangeRate =0.1;
-float OutputAmp = 1;
+float ChangeRate = 0.1; // change of AngleInput
+float OutputAmp = 1;    // output Amplify
 uint32_t timeStamp =0;
 /* USER CODE END PV */
 
@@ -105,10 +105,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  // f 1 KHz every 1 ms - decrease angler follow ChangeRate
 	  if(HAL_GetTick()-timeStamp > 0)//Set Process @ 1kHz
 	  {
 		  timeStamp = HAL_GetTick();
+
 		  AngleInput += ChangeRate;
+
+		  // overflow ถ้ากว่า 2pi ให้กลับมาที่ 0
 		  if (AngleInput > 2*M_PI)
 		  {
 			  AngleInput -= 2*M_PI;
@@ -117,6 +121,7 @@ int main(void)
 		  {
 			  AngleInput +=  2*M_PI;
 		  }
+
 		  SineOutput = sin(AngleInput) * OutputAmp;
 	  }
   }
